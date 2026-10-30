@@ -1,12 +1,12 @@
 # otel-sample-emitter
 
-A small Node.js 24 app that emits OpenTelemetry telemetry (logs, metrics, and traces) over OTLP/HTTP at controlled, configurable rates for a fixed time window.
+A small Node.js 26 app that emits OpenTelemetry telemetry (logs, metrics, and traces) over OTLP/HTTP at controlled, configurable rates for a fixed time window.
 
 It exists for one purpose: testing a downstream OpenTelemetry Collector (or any OTLP-capable receiver) with a known amount of labelled telemetry. You choose the rates and the window length, run the app once, and then verify that the receiver saw exactly what you expected.
 
 ## Prerequisites
 
-- Node.js >= 24
+- Node.js >= 26
 - An OTLP/HTTP receiver reachable at the configured endpoint (a local OpenTelemetry Collector on `:4318`, or the throwaway sink shown under [Verifying output](#verifying-output))
 
 ## Quickstart
