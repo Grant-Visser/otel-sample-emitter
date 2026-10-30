@@ -2,12 +2,12 @@
 
 A small Node.js 24 app that emits OpenTelemetry telemetry (logs, metrics, and traces) over OTLP/HTTP at controlled, configurable rates for a fixed time window.
 
-It exists for one purpose: testing a downstream OpenTelemetry Collector (or any OTLP-capable receiver, such as Cribl) with a known amount of labelled telemetry. You choose the rates and the window length, run the app once, and then verify that the receiver saw exactly what you expected.
+It exists for one purpose: testing a downstream OpenTelemetry Collector (or any OTLP-capable receiver) with a known amount of labelled telemetry. You choose the rates and the window length, run the app once, and then verify that the receiver saw exactly what you expected.
 
 ## Prerequisites
 
 - Node.js >= 24
-- An OTLP/HTTP receiver reachable at the configured endpoint (a local OpenTelemetry Collector on `:4318`, Cribl, or the throwaway sink shown under [Verifying output](#verifying-output))
+- An OTLP/HTTP receiver reachable at the configured endpoint (a local OpenTelemetry Collector on `:4318`, or the throwaway sink shown under [Verifying output](#verifying-output))
 
 ## Quickstart
 
@@ -120,7 +120,7 @@ Expected: `200`. A `404` means you are pointed at the wrong port (for example a 
 
 ### 2. Watch what the emitter actually posts
 
-If you do not yet have a collector, run this throwaway sink instead. It listens on `:4318` and prints one line per OTLP request:
+If you do not yet have a collector, run this throwaway sink instead (see [docs/collector-setup.md](docs/collector-setup.md) for a full walkthrough of standing up a real OpenTelemetry Collector). It listens on `:4318` and prints one line per OTLP request:
 
 ```bash
 node -e "require('http').createServer((req,res)=>{let n=0;req.on('data',c=>n+=c.length);req.on('end',()=>{console.log(new Date().toISOString(),req.method,req.url,n+' bytes');res.statusCode=200;res.end();});}).listen(4318,()=>console.log('OTLP sink listening on http://localhost:4318'))"
@@ -134,7 +134,7 @@ Then start the emitter. You should see lines like:
 2026-10-29T14:37:05.110Z POST /v1/metrics 2201 bytes
 ```
 
-The sink shows you the endpoints and traffic volume but does not decode payloads — use a real collector or Cribl to inspect record contents.
+The sink shows you the endpoints and traffic volume but does not decode payloads — use a real collector to inspect record contents.
 
 ### 3. Count what arrived
 
